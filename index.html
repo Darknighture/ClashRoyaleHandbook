@@ -17,14 +17,24 @@
             --ink: #e9f2f5;
             --muted: #9fb3c8;
             --card-line: rgba(255, 255, 255, 0.09);
+
+               --veil   黑底不透明度：调小更透（0.3~0.8 之间比较好看）
+               --photo  背景照片可见度：调大照片更明显（0.2~0.7） */
+            --base-rgb: 16, 27, 48;
+            --veil: 0.30;
+            --photo-opacity: 0.62;
+        }
+
+        html {
+            background-color: #05080f;
         }
 
         body {
-            background-color: #080e1a;
+            background-color: rgba(var(--base-rgb), var(--veil));
             background-image:
-                radial-gradient(1100px 620px at 12% -12%, rgba(124, 84, 255, 0.30), transparent 62%),
-                radial-gradient(900px 520px at 92% 6%, rgba(255, 176, 74, 0.18), transparent 62%),
-                radial-gradient(1100px 720px at 50% 112%, rgba(0, 148, 255, 0.20), transparent 62%);
+                radial-gradient(1100px 620px at 12% -12%, rgba(124, 84, 255, 0.34), transparent 62%),
+                radial-gradient(900px 520px at 92% 6%, rgba(255, 176, 74, 0.20), transparent 62%),
+                radial-gradient(1100px 720px at 50% 112%, rgba(0, 148, 255, 0.22), transparent 62%);
             background-attachment: fixed;
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
                          'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
@@ -38,14 +48,13 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* 本地背景照片层（低透明，避免压过内容） */
         .bg-photo {
             position: fixed;
-            inset: 0;
-            background: url('images/royale-bg.png') no-repeat center center;
+            inset: -28px;
+            background: url('images/royal-bg.webp') no-repeat center center;
             background-size: cover;
-            opacity: 0.16;
-            filter: saturate(0.85);
+            opacity: var(--photo-opacity);
+            filter: blur(5px) saturate(0.8) brightness(0.9);
             z-index: 0;
         }
 
@@ -64,12 +73,23 @@
             z-index: 1;
         }
 
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(72% 60% at 50% 45%,
+                rgba(5, 9, 16, 0.34) 0%,
+                rgba(5, 9, 16, 0.20) 50%,
+                rgba(5, 9, 16, 0.05) 78%,
+                transparent 94%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
         .container {
             max-width: 1280px;
             width: 100%;
-            background: linear-gradient(180deg, rgba(14, 24, 38, 0.78), rgba(10, 18, 30, 0.72));
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            background: linear-gradient(180deg, rgba(14, 24, 38, 0.50), rgba(10, 18, 30, 0.40));
             border-radius: 2rem;
             box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 245, 0.10);
             padding: 2.75rem 2rem 2rem;
@@ -91,7 +111,6 @@
             pointer-events: none;
         }
 
-        /* 语言切换 */
         .lang-switch {
             position: absolute;
             top: 1.5rem;
@@ -115,7 +134,6 @@
             transform: translateY(-1px);
         }
 
-        /* Hero */
         .hero {
             text-align: center;
             margin-bottom: 1.75rem;
@@ -144,6 +162,7 @@
             background: var(--gold);
             box-shadow: 0 0 8px var(--gold);
             animation: pulse 2.2s ease-in-out infinite;
+            will-change: opacity, transform;
         }
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
@@ -223,7 +242,6 @@
 
         .card {
             position: relative;
-            overflow: hidden;
             border-radius: 1.35rem;
             padding: 1.6rem 1.2rem 1.5rem;
             text-decoration: none;
@@ -235,8 +253,8 @@
             background: linear-gradient(165deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.018));
             border: 1px solid var(--card-line);
             box-shadow: 0 8px 22px -12px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-            transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1),
-                        box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+            transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            will-change: transform;
             animation: rise 0.55s cubic-bezier(0.2, 0.8, 0.3, 1) backwards;
         }
 
@@ -249,42 +267,41 @@
             content: "";
             position: absolute;
             inset: 0;
+            border-radius: inherit;
             background: radial-gradient(130% 85% at 50% -18%, var(--c1), transparent 62%);
             opacity: 0.22;
             transition: opacity 0.35s ease;
+            will-change: opacity;
             pointer-events: none;
         }
 
         .card::after {
             content: "";
             position: absolute;
-            left: 0;
-            bottom: 0;
-            height: 3px;
-            width: 100%;
-            background: linear-gradient(90deg, var(--c1), var(--c2));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1);
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--c1), var(--c2)) bottom left / 100% 3px no-repeat;
+            box-shadow:
+                inset 0 0 0 1px rgba(255, 217, 102, 0.5),
+                0 26px 44px -16px rgba(0, 0, 0, 0.8),
+                0 0 34px -12px var(--c2);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            will-change: opacity;
+            pointer-events: none;
         }
 
         .card:hover {
-            transform: translateY(-7px);
-            border-color: rgba(255, 217, 102, 0.5);
-            background: linear-gradient(165deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.03));
-            box-shadow: 0 26px 44px -16px rgba(0, 0, 0, 0.8),
-                        0 0 0 1px rgba(255, 217, 102, 0.35),
-                        0 0 34px -12px var(--c2);
+            transform: translateY(-7px); 
         }
-        .card:hover::before { opacity: 0.45; }
-        .card:hover::after { transform: scaleX(1); }
+        .card:hover::before { opacity: 0.55; }
+        .card:hover::after { opacity: 1; }
         .card:hover .icon { transform: translateY(-2px) scale(1.08) rotate(-5deg); }
         .card:hover .go { opacity: 1; transform: translateX(0); }
         .card:hover h3 { color: #fff; }
 
         .card.hidden { display: none; }
 
-        /* 图标底座 */
         .icon {
             position: relative;
             width: 78px;
@@ -298,9 +315,9 @@
                         inset 0 1px 0 rgba(255, 255, 255, 0.45),
                         inset 0 0 0 1px rgba(255, 255, 255, 0.16);
             transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            will-change: transform;
         }
 
-        /* 斜向高光 */
         .icon::after {
             content: "";
             position: absolute;
@@ -329,7 +346,6 @@
             margin-bottom: 0.35rem;
             color: #ffecb3;
             letter-spacing: 0.01em;
-            transition: color 0.3s ease;
         }
 
         .card p {
@@ -347,10 +363,10 @@
             color: var(--gold);
             opacity: 0;
             transform: translateX(-8px);
-            transition: all 0.35s ease;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            will-change: opacity, transform;
         }
 
-        /* 角标 */
         .tag {
             position: absolute;
             top: 0.8rem;
@@ -374,7 +390,6 @@
             border: 1px solid rgba(255, 255, 255, 0.16);
         }
 
-        /* 页脚 */
         .footer-note {
             text-align: center;
             margin-top: 2.5rem;
@@ -445,13 +460,13 @@
             <p data-i18n="card1_desc">各赛季不同类型卡牌使用率详情</p>
             <span class="go">↗</span>
         </a>
-        <!-- 进化卡使用分析 -->
-        <a href="evo.clashroyale.dpdns.org" class="card" data-cat="data" target="_blank" rel="noopener"
+        <!-- 进化卡分析 -->
+        <a href="https://evo.clashroyale.dpdns.org" class="card" data-cat="data" target="_blank" rel="noopener"
            style="--c1:#a3e635; --c2:#4d7c0f;">
             <span class="tag new">NEW</span>
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2.5 5.5 13.5H11l-1.5 8L19 10.5h-5.5z"/></svg></div>
-            <h3 data-i18n="card14_title">进化卡使用分析</h3>
-            <p data-i18n="card14_desc">进化卡登场率与实战表现分析</p>
+            <h3 data-i18n="card14_title">进化卡分析</h3>
+            <p data-i18n="card14_desc">进化卡登场率与表现分析</p>
             <span class="go">↗</span>
         </a>
         <!-- 卡牌历史调整 -->
@@ -546,13 +561,13 @@
             <p data-i18n="card9_desc">各等级所需经验</p>
             <span class="go">↗</span>
         </a>
-        <!-- 墓园召唤位置模拟 -->
-        <a href="gy.clashroyale.dpdns.org" class="card" data-cat="data" target="_blank" rel="noopener"
+        <!-- 墓园召唤位置 -->
+        <a href="https://gy.clashroyale.dpdns.org" class="card" data-cat="data" target="_blank" rel="noopener"
            style="--c1:#94a3b8; --c2:#334155;">
             <span class="tag new">NEW</span>
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19.5v-9.5a5 5 0 0 1 10 0v9.5"/><path d="M4 19.5h16"/><path d="M12 7.2v3.4"/><path d="M9.7 8.9h4.6"/></svg></div>
-            <h3 data-i18n="card15_title">墓园召唤位置模拟</h3>
-            <p data-i18n="card15_desc">模拟墓园法术骷髅的召唤落点</p>
+            <h3 data-i18n="card15_title">墓园召唤位置</h3>
+            <p data-i18n="card15_desc">模拟墓园召唤小骷髅的落点</p>
             <span class="go">↗</span>
         </a>
     </div>
@@ -566,10 +581,9 @@
 </div>
 
 <script>
-    // 翻译字典
     const i18n = {
         zh: {
-            badge_text: "Clash Royale · 数据中枢",
+            badge_text: "皇室战争 · 数据中枢",
             subtitle: "卡牌百科 · 数据挖掘 · 机制解析",
             stats_line: "共 <b>{n}</b> 个数据站点 · 持续更新",
             cat_all: "全部",
@@ -600,13 +614,13 @@
             card11_title: "对塔伤害",
             card11_desc: "法术和单位对塔的减伤情况",
             card12_title: "皇室战旗",
-            card12_desc: "全部战旗外观图鉴",
+            card12_desc: "全部战旗图鉴",
             card13_title: "皇室塔皮",
-            card13_desc: "全部塔皮外观图鉴",
-            card14_title: "进化卡使用率分析",
-            card14_desc: "进化卡登场率与实战表现分析",
-            card15_title: "墓园生成位置模拟",
-            card15_desc: "模拟墓园法术骷髅的召唤落点",
+            card13_desc: "全部塔皮图鉴",
+            card14_title: "进化卡分析",
+            card14_desc: "进化卡登场率与表现分析",
+            card15_title: "墓园生成位置",
+            card15_desc: "模拟墓园召唤小骷髅的落点",
             footer_text: "🎯 基于皇室战争客户端数据挖掘、API及社区研究 🎯",
             lang_btn: "English"
         },
@@ -645,9 +659,9 @@
             card12_desc: "full banner gallery",
             card13_title: "Tower Skins",
             card13_desc: "full tower skin gallery",
-            card14_title: "Evolution Usage Analysis",
+            card14_title: "Evolution Analysis",
             card14_desc: "evolution card usage and performance",
-            card15_title: "Graveyard Spawn Simulator",
+            card15_title: "Graveyard Simulator",
             card15_desc: "simulate skeleton spawn positions",
             footer_text: "🎯 Based on Clash Royale Client Data Mining, API & Community Research 🎯",
             lang_btn: "中文"
@@ -684,7 +698,6 @@
         setLanguage(currentLang === 'zh' ? 'en' : 'zh');
     }
 
-    // 分类筛选
     function initFilters() {
         const chips = document.querySelectorAll('.chip');
         const cards = document.querySelectorAll('.card');
@@ -700,7 +713,6 @@
                     const show = (f === 'all' || card.getAttribute('data-cat') === f);
                     card.classList.toggle('hidden', !show);
                     if (show) {
-                        // 重新播放进场动画，按可见顺序错开
                         card.style.animation = 'none';
                         void card.offsetWidth;
                         card.style.animation = 'rise .5s cubic-bezier(.2,.8,.3,1) ' + (i++ * 45) + 'ms backwards';
@@ -714,7 +726,6 @@
         setLanguage(currentLang);
         initFilters();
 
-        // 首屏错峰入场
         document.querySelectorAll('.card').forEach((card, i) => {
             card.style.animationDelay = (i * 45) + 'ms';
         });
