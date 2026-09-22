@@ -407,6 +407,14 @@
         }
         .footer-note a:hover { opacity: 0.75; }
 
+        .footer-note .disclaimer {
+            margin: 0.12rem 0 0.55rem;
+            font-size: 0.68rem;
+            line-height: 1.45;
+            color: #6d8194;
+            letter-spacing: 0.01em;
+        }
+
         @media (max-width: 680px) {
             body { padding: 2rem 0.9rem; }
             .container { padding: 2rem 1.1rem 1.5rem; border-radius: 1.5rem; }
@@ -583,7 +591,7 @@
 
     <div class="footer-note">
         <span data-i18n="footer_text">🎯 基于皇室战争客户端数据挖掘、API及社区研究 🎯</span>
-        <br>
+        <div class="disclaimer" data-i18n="disclaimer">本内容为非官方内容，未获 Supercell 认可。</div>
         <a href="https://www.youtube.com/channel/UC8PuQ5pbleMaLXMlcOk1Img" target="_blank" rel="noopener">🐙 YouTube</a>
         <a href="https://space.bilibili.com/107320245" target="_blank" rel="noopener">📺 Bilibili</a>
     </div>
@@ -633,6 +641,7 @@
             card16_title: "皇室徽章",
             card16_desc: "全部徽章图鉴",
             footer_text: "🎯 基于皇室战争客户端数据挖掘、API及社区研究 🎯",
+            disclaimer: "本内容为非官方内容，未获 Supercell 认可。",
             lang_btn: "English"
         },
         en: {
@@ -677,6 +686,7 @@
             card16_title: "Badges",
             card16_desc: "full badge gallery",
             footer_text: "🎯 Based on Clash Royale Client Data Mining, API & Community Research 🎯",
+            disclaimer: "This content is unofficial and not endorsed by Supercell.",
             lang_btn: "中文"
         }
     };
